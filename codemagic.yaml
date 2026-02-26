@@ -1,0 +1,29 @@
+# CODEMAGIC CONFIGURATION FOR COLIN'S ESP
+# Place this file in the root directory of your project
+
+workflows:
+  android-build:
+    name: Survival ESP Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - sdk_vars # Optional, if they have defined groups
+      vars:
+        PACKAGE_NAME: "com.survival.menu"
+      java: 17
+
+    scripts:
+      - name: Set up local.properties
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+      - name: Build Android Debug APK
+        script: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+    artifacts:
+      - app/build/outputs/apk/debug/*.apk
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
